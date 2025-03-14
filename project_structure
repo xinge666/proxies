@@ -1,0 +1,11 @@
+proxy_pool/
+├── config/
+│   └── config.py
+├── core/
+│   ├── __init__.py
+│   ├── fetcher.py
+│   ├── tester.py
+│   └── db.py
+├── api/
+│   └── proxy_api.py
+└── main.py 
