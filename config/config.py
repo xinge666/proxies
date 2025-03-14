@@ -26,8 +26,14 @@ QUEUE_TEST = 'proxy_test'
 
 # 代理源配置
 PROXY_SOURCES = [
-    #'https://raw.githubusercontent.com/gitrecon1455/ProxyScraper/refs/heads/main/proxies.txt',
-    'https://github.com/Zaeem20/FREE_PROXIES_LIST/raw/master/http.txt'
+    'https://raw.githubusercontent.com/gitrecon1455/ProxyScraper/refs/heads/main/proxies.txt',
+    'https://raw.githubusercontent.com/Zaeem20/FREE_PROXIES_LIST/master/http.txt',
+    'https://raw.githubusercontent.com/variableninja/proxyscraper/main/proxies/http.txt',
+    'https://raw.githubusercontent.com/r00tee/Proxy-List/main/Https.txt',
+    'https://raw.githubusercontent.com/vakhov/fresh-proxy-list/master/https.txt',
+    'https://raw.githubusercontent.com/MrMarble/proxy-list/main/all.txt',
+    'https://raw.githubusercontent.com/SevenworksDev/proxy-list/main/proxies/http.txt'
+
 ]
 
 # 测试目标URL
@@ -38,7 +44,7 @@ TEST_URLS = [
 
 # 测试配置
 TEST_TIMEOUT = 1
-GOOD_PROXY_CHECK_INTERVAL = 5 * 60  # 5分钟
+GOOD_PROXY_CHECK_INTERVAL = 1 * 60  # 5分钟
 BAD_PROXY_CHECK_INTERVAL = 1 * 60 * 60  # 1小时
-TEST_BATCH_SIZE = 100
-TEST_THREAD_COUNT = 20 
+TEST_BATCH_SIZE = 2000
+TEST_THREAD_COUNT = 500
