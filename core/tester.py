@@ -14,7 +14,7 @@ class ProxyTester:
         self.redis = RedisClient()
         
     def test_proxy(self, proxy):
-        """测试单个代理"""
+        """测试单个代理,必须所有的 TEST_URLS 都能通过"""
         for test_url in TEST_URLS:
             try:
                 proxies = {
@@ -27,12 +27,15 @@ class ProxyTester:
                     timeout=TEST_TIMEOUT
                 )
                 if response.status_code == 200:
-                    self.redis.add_good_proxy(proxy)
-                    return True
+                    continue
+                else:
+                    self.redis.add_bad_proxy(proxy)
+                    return False
             except:
-                pass
-        self.redis.add_bad_proxy(proxy)
-        return False
+                self.redis.add_bad_proxy(proxy)
+                return False
+        self.redis.add_good_proxy(proxy)
+        return True
 
     def batch_test(self, proxy_list):
         """批量测试代理"""
