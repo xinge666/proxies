@@ -43,26 +43,16 @@ class ProxyTester:
         """开始消费测试队列"""
         logger.info('开始消费测试队列...')
         while True:
-            # 批量获取队列消息,最多获取TEST_BATCH_SIZE个
-            messages = []
-            for _ in range(TEST_BATCH_SIZE):
-                message = self.redis.db.brpop(REDIS_QUEUE_TEST, timeout=1)
-                if message:
-                    messages.append(message)
-                else:
-                    break
-                
-            if messages:
+            # 阻塞式获取队列消息,超时时间1秒
+            message = self.redis.db.brpop(REDIS_QUEUE_TEST, timeout=1)
+            if message:
                 try:
-                    # 提取代理列表
-                    proxy_list = [json.loads(msg[1])['proxy'] for msg in messages]
-                    # 批量测试代理
-                    self.batch_test(proxy_list)
-                    logger.info(f"批量测试完成 {len(proxy_list)} 个代理")
+                    proxy = json.loads(message[1])['proxy']
+                    res = self.test_proxy(proxy)
+                    print(proxy,res)
                 except Exception as e:
-                    logger.error(f"批量处理代理测试消息失败: {str(e)}")
-            
-            time.sleep(0.1)  # 避免CPU占用过高
+                    logger.error(f"处理代理测试消息失败: {str(e)}")
+            # time.sleep(0.1)  # 避免CPU占用过高
 
     def schedule_retest(self):
         """定时重新测试代理"""

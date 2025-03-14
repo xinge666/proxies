@@ -36,9 +36,14 @@ class ProxyFetcher:
                     new_proxies = proxy_list - existing_proxies
                     
                     if new_proxies:
-                        # 发送到测试队列
-                        for proxy in list(new_proxies):
-                            self.redis.db.lpush(REDIS_QUEUE_TEST, json.dumps({'proxy': proxy}))
+                        pipe = self.redis.db.pipeline()
+                        for proxy in new_proxies:
+                            # 添加到测试队列
+                            pipe.lpush(REDIS_QUEUE_TEST, json.dumps({'proxy': proxy}))
+                            # 同时添加到所有代理集合
+                            pipe.sadd(REDIS_KEY_ALL_PROXIES, proxy)
+                        pipe.execute()
+                        
                         logger.info(f"获取到{len(proxy_list)}个代理，新增{len(new_proxies)}个到测试队列")
                         return True
                     else:
