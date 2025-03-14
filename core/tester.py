@@ -48,10 +48,11 @@ class ProxyTester:
             if message:
                 try:
                     proxy = json.loads(message[1])['proxy']
-                    self.test_proxy(proxy)
+                    res = self.test_proxy(proxy)
+                    print(proxy,res)
                 except Exception as e:
                     logger.error(f"处理代理测试消息失败: {str(e)}")
-            time.sleep(0.1)  # 避免CPU占用过高
+            # time.sleep(0.1)  # 避免CPU占用过高
 
     def schedule_retest(self):
         """定时重新测试代理"""
@@ -66,12 +67,12 @@ class ProxyTester:
                         self.redis.db.lpush(REDIS_QUEUE_TEST, json.dumps({'proxy': proxy}))
             time.sleep(GOOD_PROXY_CHECK_INTERVAL)
 
-            # 测试坏代理
-            bad_proxies = self.redis.get_bad_proxies()
-            if bad_proxies:
-                # 将坏代理重新放入测试队列
-                for proxy in bad_proxies:
-                    # 检查代理是否已经在队列中
-                    if not self.redis.db.lpos(REDIS_QUEUE_TEST, json.dumps({'proxy': proxy})):
-                        self.redis.db.lpush(REDIS_QUEUE_TEST, json.dumps({'proxy': proxy}))
-            time.sleep(BAD_PROXY_CHECK_INTERVAL) 
+            # # 测试坏代理
+            # bad_proxies = self.redis.get_bad_proxies()
+            # if bad_proxies:
+            #     # 将坏代理重新放入测试队列
+            #     for proxy in bad_proxies:
+            #         # 检查代理是否已经在队列中
+            #         if not self.redis.db.lpos(REDIS_QUEUE_TEST, json.dumps({'proxy': proxy})):
+            #             self.redis.db.lpush(REDIS_QUEUE_TEST, json.dumps({'proxy': proxy}))
+            # time.sleep(BAD_PROXY_CHECK_INTERVAL) 

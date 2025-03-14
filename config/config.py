@@ -26,18 +26,18 @@ QUEUE_TEST = 'proxy_test'
 
 # 代理源配置
 PROXY_SOURCES = [
-    'http://example1.com/proxy.txt',
-    'http://example2.com/proxy.txt',
+    #'https://raw.githubusercontent.com/gitrecon1455/ProxyScraper/refs/heads/main/proxies.txt',
+    'https://github.com/Zaeem20/FREE_PROXIES_LIST/raw/master/http.txt'
 ]
 
 # 测试目标URL
 TEST_URLS = [
     'http://www.baidu.com',
-    'http://www.google.com',
+    'http://app-cdn.jjwxc.net',
 ]
 
 # 测试配置
-TEST_TIMEOUT = 10
+TEST_TIMEOUT = 1
 GOOD_PROXY_CHECK_INTERVAL = 5 * 60  # 5分钟
 BAD_PROXY_CHECK_INTERVAL = 1 * 60 * 60  # 1小时
 TEST_BATCH_SIZE = 100

@@ -16,7 +16,8 @@ def get_counts():
     return jsonify({
         'all': len(redis_client.get_all_proxies()),
         'good': len(redis_client.get_good_proxies()),
-        'bad': len(redis_client.get_bad_proxies())
+        'bad': len(redis_client.get_bad_proxies()),
+        'queue': redis_client.get_queue_proxies()
     })
 
 def run_api():

@@ -33,6 +33,9 @@ class RedisClient:
         """获取所有待测试代理"""
         return self.db.smembers(REDIS_KEY_ALL_PROXIES)
     
+    def get_queue_proxies(self):
+        return self.db.llen(REDIS_QUEUE_TEST)
+    
     def get_good_proxies(self):
         """获取所有可用代理"""
         return self.db.zrange(REDIS_KEY_GOOD_PROXIES, 0, -1)
@@ -46,4 +49,19 @@ class RedisClient:
         proxies = self.db.zrange(REDIS_KEY_GOOD_PROXIES, 0, -1)
         if proxies:
             return random.choice(proxies)
-        return None 
+        return None
+    
+    def clear(self):
+        """删除所有的 REDIS_KEY*"""
+        keys = [
+            REDIS_KEY_ALL_PROXIES,
+            REDIS_KEY_GOOD_PROXIES,
+            REDIS_KEY_BAD_PROXIES,
+            REDIS_QUEUE_TEST
+        ]
+        for key in keys:
+            if self.db.exists(key):
+                self.db.delete(key)
+
+if __name__=="__main__":
+    pass
