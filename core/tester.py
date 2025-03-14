@@ -17,10 +17,7 @@ class ProxyTester:
         """测试单个代理,必须所有的 TEST_URLS 都能通过"""
         for test_url in TEST_URLS:
             try:
-                proxies = {
-                    'http': f'http://{proxy}',
-                    'https': f'http://{proxy}'
-                }
+                proxies = PROXY_SOURCES_PROXY
                 response = requests.get(
                     test_url,
                     proxies=proxies,

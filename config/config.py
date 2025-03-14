@@ -14,15 +14,6 @@ REDIS_KEY_BAD_PROXIES = 'proxies:bad'
 # Redis队列键
 REDIS_QUEUE_TEST = 'queue:proxy_test'  # 测试队列的key
 
-# RabbitMQ配置
-RABBITMQ_HOST = os.getenv('RABBITMQ_HOST', 'localhost')
-RABBITMQ_PORT = int(os.getenv('RABBITMQ_PORT', 5672))
-RABBITMQ_USER = os.getenv('RABBITMQ_USER', 'guest')
-RABBITMQ_PASSWORD = os.getenv('RABBITMQ_PASSWORD', 'guest')
-
-# 队列名称
-QUEUE_FETCH = 'proxy_fetch'
-QUEUE_TEST = 'proxy_test'
 
 # 代理源配置
 PROXY_SOURCES = [
@@ -36,6 +27,14 @@ PROXY_SOURCES = [
 
 ]
 
+# 访问 github 需要代理
+PROXY_SOURCES_PROXY = None
+
+PROXY_SOURCES_PROXY = {
+                "http": "http://127.0.0.1:10809",
+                "https": "http://127.0.0.1:10809",
+            }
+
 # 测试目标URL
 TEST_URLS = [
     'http://www.baidu.com',
@@ -48,3 +47,4 @@ GOOD_PROXY_CHECK_INTERVAL = 5 * 60  # 5分钟
 BAD_PROXY_CHECK_INTERVAL = 1 * 60 * 60  # 1小时
 TEST_BATCH_SIZE = 2000
 TEST_THREAD_COUNT = 500
+
