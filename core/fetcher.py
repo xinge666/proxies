@@ -12,10 +12,7 @@ class ProxyFetcher:
         
     def fetch_proxies(self, proxy_source_url):
         try:
-            proxies = {
-                "http": "http://127.0.0.1:10809",
-                "https": "http://127.0.0.1:10809",
-            }
+            proxies = PROXY_SOURCES_PROXY
             
             response = requests.get(proxy_source_url, proxies=proxies, timeout=10)
             if response.status_code == 200:

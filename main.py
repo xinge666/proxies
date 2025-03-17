@@ -33,10 +33,10 @@ def run_tester():
     retest_thread.daemon = True
     retest_thread.start()
 
-    # 启动重测低质线程（必要性存疑）
-    # retest_thread = threading.Thread(target=tester.schedule_retest_bad)
-    # retest_thread.daemon = True
-    # retest_thread.start()
+    #启动重测低质线程（必要性存疑）
+    retest_thread = threading.Thread(target=tester.schedule_retest_bad)
+    retest_thread.daemon = True
+    retest_thread.start()
     
 
 if __name__ == '__main__':

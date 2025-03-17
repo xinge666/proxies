@@ -23,7 +23,7 @@ PROXY_SOURCES = [
     'https://raw.githubusercontent.com/r00tee/Proxy-List/main/Https.txt',
     'https://raw.githubusercontent.com/vakhov/fresh-proxy-list/master/https.txt',
     'https://raw.githubusercontent.com/MrMarble/proxy-list/main/all.txt',
-    'https://raw.githubusercontent.com/SevenworksDev/proxy-list/main/proxies/http.txt'
+    'https://raw.githubusercontent.com/SevenworksDev/proxy-list/main/proxies/http.txt',
 
 ]
 
@@ -43,8 +43,8 @@ TEST_URLS = [
 
 # 测试配置
 TEST_TIMEOUT = 1
-GOOD_PROXY_CHECK_INTERVAL = 5 * 60  # 5分钟
-BAD_PROXY_CHECK_INTERVAL = 1 * 60 * 60  # 1小时
+GOOD_PROXY_CHECK_INTERVAL = 15 * 60  # 5分钟
+BAD_PROXY_CHECK_INTERVAL = 24 * 60 * 60  # 1小时
 TEST_BATCH_SIZE = 2000
 TEST_THREAD_COUNT = 500
 
