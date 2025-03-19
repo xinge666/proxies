@@ -3,6 +3,7 @@ from config.config import *
 import logging
 import random
 
+
 logger = logging.getLogger(__name__)
 
 class RedisClient:
@@ -64,4 +65,6 @@ class RedisClient:
                 self.db.delete(key)
 
 if __name__=="__main__":
+    redis_client = RedisClient()
+    redis_client.clear()
     pass

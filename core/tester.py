@@ -17,17 +17,23 @@ class ProxyTester:
         """测试单个代理,必须所有的 TEST_URLS 都能通过"""
         for test_url in TEST_URLS:
             try:
-                proxies = PROXY_SOURCES_PROXY
+                proxies = {"http": f"http://{proxy}"}
+                #print(proxies)
                 response = requests.get(
                     test_url,
                     proxies=proxies,
                     timeout=TEST_TIMEOUT
                 )
-                if response.status_code == 200:
+                if TEST_TEXT_FLAG:
+                    if response.status_code == 200 and TEST_TEXT_FLAG in response.text:
+                        print(response.text[:500].replace('\n',''))
+                        continue
+                elif response.status_code == 200:
+                    print(response.text[:500].replace('\n',''))
                     continue
-                else:
-                    self.redis.add_bad_proxy(proxy)
-                    return False
+                
+                self.redis.add_bad_proxy(proxy)
+                return False
             except:
                 self.redis.add_bad_proxy(proxy)
                 return False

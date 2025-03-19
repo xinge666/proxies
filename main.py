@@ -40,6 +40,10 @@ def run_tester():
     
 
 if __name__ == '__main__':
+    from core.db import RedisClient
+
+    # redis_client = RedisClient()
+    # redis_client.clear()
     # # 启动获取器
     fetcher_thread = threading.Thread(target=run_fetcher)
     fetcher_thread.daemon = True

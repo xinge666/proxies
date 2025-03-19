@@ -38,13 +38,14 @@ PROXY_SOURCES_PROXY = {
 # 测试目标URL
 TEST_URLS = [
     'http://www.baidu.com',
-    'http://app-cdn.jjwxc.net',
+    #'http://www.yimixs.net/shuku?page=832',
 ]
 
+TEST_TEXT_FLAG =  '百度'
 # 测试配置
-TEST_TIMEOUT = 1
+TEST_TIMEOUT = 5
 GOOD_PROXY_CHECK_INTERVAL = 15 * 60  # 5分钟
 BAD_PROXY_CHECK_INTERVAL = 24 * 60 * 60  # 1小时
-TEST_BATCH_SIZE = 2000
+TEST_BATCH_SIZE = 3000
 TEST_THREAD_COUNT = 500
 
