@@ -29,12 +29,25 @@ class RedisClient:
         self.db.sadd(REDIS_KEY_BAD_PROXIES, proxy)
         self.db.zrem(REDIS_KEY_GOOD_PROXIES, proxy)
     
+    def get_bad_proxies_lenght(self):
+        """获取不可用代理数量"""
+        return self.db.scard(REDIS_KEY_BAD_PROXIES)
+    
+    def get_all_proxies_lenght(self):
+        """获取所有待测试代理数量"""
+        return self.db.scard(REDIS_KEY_ALL_PROXIES)
+    
+    def get_good_proxies_lenght(self):
+        """获取所有可用代理数量"""
+        return self.db.zcard(REDIS_KEY_GOOD_PROXIES)
+
     def get_all_proxies(self):
         """获取所有待测试代理"""
         return self.db.smembers(REDIS_KEY_ALL_PROXIES)
     
     def get_queue_proxies(self):
         return self.db.llen(REDIS_QUEUE_TEST)
+    
     
     def get_good_proxies(self):
         """获取所有可用代理"""
