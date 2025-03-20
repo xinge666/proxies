@@ -15,35 +15,34 @@ class ProxyTester:
         
     def test_proxy(self, proxy):
         """测试单个代理,必须所有的 TEST_URLS 都能通过"""
-        for test_url in TEST_URLS:
-            try:
-                proxies = {"http": f"http://{proxy}"}
-                #print(proxies)
-                response = requests.get(
-                    test_url,
-                    proxies=proxies,
-                    timeout=TEST_TIMEOUT,
-                    headers=HEADERS
-                )
-                if TEST_TEXT_FLAG:
-                    if response.status_code == 200 and TEST_TEXT_FLAG in response.text:
-                        
+        try:
+            for test_url in TEST_URLS:
+                try:
+                    proxies = {"http": f"http://{proxy}"}
+                    #print(proxies)
+                    response = requests.get(
+                        test_url,
+                        proxies=proxies,
+                        timeout=TEST_TIMEOUT,
+                        headers=HEADERS
+                    )
+                    if TEST_TEXT_FLAG:
+                        if response.status_code == 200 and TEST_TEXT_FLAG in response.text:
+                            
+                            continue
+                        else:
+                            pass
+                    elif response.status_code == 200:
                         continue
-                    else:
-                        #print(response.text[:500].replace('\n',''))
-                        pass
-
-                elif response.status_code == 200:
-                    #print(response.text[:500].replace('\n',''))
-                    continue
-                
-                self.redis.add_bad_proxy(proxy)
-                return False
-            except:
-                self.redis.add_bad_proxy(proxy)
-                return False
-        self.redis.add_good_proxy(proxy)
-        return True
+                    self.redis.add_bad_proxy(proxy)
+                    return False
+                except Exception as e:
+                    self.redis.add_bad_proxy(proxy)
+                    return False
+            self.redis.add_good_proxy(proxy)
+            return True
+        except:
+            return False
 
     def batch_test(self, proxy_list):
         """批量测试代理"""
@@ -83,23 +82,29 @@ class ProxyTester:
         """定时重新测试代理"""
         while True:
             # 测试好代理
-            good_proxies = self.redis.get_good_proxies()
-            if good_proxies:
-                # 将好代理重新放入测试队列
-                for proxy in good_proxies:
-                    # 检查代理是否已经在队列中
-                    if not self.redis.db.lpos(REDIS_QUEUE_TEST, json.dumps({'proxy': proxy})):
-                        self.redis.db.lpush(REDIS_QUEUE_TEST, json.dumps({'proxy': proxy}))
+            try:
+                good_proxies = self.redis.get_good_proxies()
+                if good_proxies:
+                    # 将好代理重新放入测试队列
+                    for proxy in good_proxies:
+                        # 检查代理是否已经在队列中
+                        if not self.redis.db.lpos(REDIS_QUEUE_TEST, json.dumps({'proxy': proxy})):
+                            self.redis.db.lpush(REDIS_QUEUE_TEST, json.dumps({'proxy': proxy}))
+            except:
+                pass
             time.sleep(GOOD_PROXY_CHECK_INTERVAL)
 
     def schedule_retest_bad(self):
         """定时重新测试代理"""
         while True:
-            bad_proxies = self.redis.get_bad_proxies()
-            if bad_proxies:
-                # 将坏代理重新放入测试队列
-                for proxy in bad_proxies:
-                    # 检查代理是否已经在队列中
-                    if not self.redis.db.lpos(REDIS_QUEUE_TEST, json.dumps({'proxy': proxy})):
-                        self.redis.db.lpush(REDIS_QUEUE_TEST, json.dumps({'proxy': proxy}))
+            try:
+                bad_proxies = self.redis.get_bad_proxies()
+                if bad_proxies:
+                    # 将坏代理重新放入测试队列
+                    for proxy in bad_proxies:
+                        # 检查代理是否已经在队列中
+                        if not self.redis.db.lpos(REDIS_QUEUE_TEST, json.dumps({'proxy': proxy})):
+                            self.redis.db.lpush(REDIS_QUEUE_TEST, json.dumps({'proxy': proxy}))
+            except:
+                pass
             time.sleep(BAD_PROXY_CHECK_INTERVAL) 

@@ -14,15 +14,20 @@ logging.basicConfig(
 def run_fetcher():
     fetcher = ProxyFetcher()
     while True:
-        for url in PROXY_SOURCES:
-            print(url)
-            fetcher.fetch_proxies(url)
-        time.sleep(3600)  # 每小时获取一次
+        try:
+            for url in PROXY_SOURCES:
+                print(url)
+                fetcher.fetch_proxies(url)
+        except:
+            pass
+        time.sleep(60*3)  # 每小时获取一次
 
 def run_tester():
     tester = ProxyTester()
     # tester.start_consuming()
     # 启动消费者线程
+    redis_client = RedisClient()
+
     print('启动消费者线程')
     consumer_thread = threading.Thread(target=tester.start_consuming)
     consumer_thread.daemon = True
@@ -33,17 +38,23 @@ def run_tester():
     retest_thread.daemon = True
     retest_thread.start()
 
-    #启动重测低质线程（必要性存疑）
+    # 启动重测低质线程（必要性存疑）
     retest_thread = threading.Thread(target=tester.schedule_retest_bad)
     retest_thread.daemon = True
     retest_thread.start()
     
 
+    # 启动重测低质线程（必要性存疑）
+    retest_thread = threading.Thread(target=redis_client.clean_expired_proxies)
+    retest_thread.daemon = True
+    retest_thread.start()
+
+
 if __name__ == '__main__':
     from core.db import RedisClient
 
     redis_client = RedisClient()
-    redis_client.clear()
+    #redis_client.clear()
     # # 启动获取器
     fetcher_thread = threading.Thread(target=run_fetcher)
     fetcher_thread.daemon = True
